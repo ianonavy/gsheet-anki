@@ -10,7 +10,13 @@ from .gen_deck import list_deck_names, gen_deck_file
 SECRET_KEY = os.getenv("SECRET_KEY")
 app, rt = fast_app(
     secret_key=SECRET_KEY,
+    pico=False,
     hdrs=[
+        Link(
+            rel="stylesheet",
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.violet.min.css",
+        ),
+        Style(":root { --pico-font-size: 100%; }"),
         Link(
             rel="stylesheet",
             href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css",
