@@ -36,7 +36,7 @@ def input_form(spreadsheet_url=""):
         ),
         Button("Submit", type="submit", style="flex: 0"),
         hx_post="/decks",
-        hx_trigger="submit",
+        hx_trigger="load, submit",
         hx_target="#decks",
         style="display: flex; flex-direction: row; gap: 0.5rem",
     )
@@ -45,7 +45,6 @@ def input_form(spreadsheet_url=""):
 @rt("/")
 async def home(request: Request, session):
     spreadsheet_url = session.get("spreadsheet_url", "")
-    all_decks = await decks(request, session)
     return (
         Title("gsheet-anki"),
         Body(
@@ -83,7 +82,6 @@ async def home(request: Request, session):
                 id="form",
             ),
             Div(
-                all_decks,
                 id="decks",
             ),
             footer(),
