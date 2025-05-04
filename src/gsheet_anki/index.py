@@ -1,3 +1,5 @@
+from urllib.parse import unquote
+
 from fasthtml.common import *
 
 from .gen_deck import list_deck_names, gen_deck_file
@@ -24,6 +26,7 @@ def home():
 
 @rt("/download/{deck}")
 def download(deck: str):
+    deck = unquote(deck)
     filename, file_ = gen_deck_file(deck, in_memory=True)
     return StreamingResponse(
         file_,
