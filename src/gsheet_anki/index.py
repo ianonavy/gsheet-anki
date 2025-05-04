@@ -8,11 +8,7 @@ from .gen_deck import list_deck_names, gen_deck_file
 
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-app, rt = fast_app(
-    secret_key=SECRET_KEY,
-    pico=False,
-    hdrs=[Style("h1, h2 { margin: 0; }")],
-)
+app, rt = fast_app(secret_key=SECRET_KEY)
 
 
 def input_form(spreadsheet_url=""):
@@ -24,11 +20,11 @@ def input_form(spreadsheet_url=""):
             value=spreadsheet_url,
             style="width: 100%",
         ),
-        Button("Submit", type="submit"),
+        Button("Submit", type="submit", style="flex: 0"),
         hx_post="/decks",
         hx_trigger="submit",
         hx_target="#decks",
-        style="display: flex; flex-direction: row; gap: 10px; width: 800px",
+        style="display: flex; flex-direction: row; gap: 0.5rem",
     )
 
 
@@ -36,14 +32,24 @@ def input_form(spreadsheet_url=""):
 async def home(request: Request, session):
     spreadsheet_url = session.get("spreadsheet_url", "")
     all_decks = await decks(request, session)
-    return Body(
-        H1("gsheet-anki"),
-        input_form(spreadsheet_url),
-        Div(
-            all_decks,
-            id="decks",
+    return (
+        Title("gsheet-anki"),
+        Body(
+            Div(
+                H1("gsheet-anki"),
+                input_form(spreadsheet_url),
+                id="form",
+            ),
+            Div(
+                all_decks,
+                id="decks",
+            ),
+            style=(
+                "display: flex; flex-direction: column; gap: 1rem;"
+                "max-width: 800px; width: 100vw; padding: 1rem; margin: auto;"
+                "font-family: sans-serif;"
+            ),
         ),
-        style="width: 800px; display: flex; flex-direction: column; gap: 20px; font-family: sans-serif",
     )
 
 
@@ -72,10 +78,15 @@ async def decks(request: Request, session):
             "Available Decks",
             A(
                 svgs.arrows_rotate.solid,
-                style="font-weight: normal; color: inherit; max-width: 20px; width:100%; max-height: 20px; height: 100%; display: flex",
+                style=(
+                    "display: flex; flex-direction: column;"
+                    "align-items: center; justify-content: center;"
+                    "max-width: 20px; width:100%;"
+                    "color: inherit;"
+                ),
                 href="/",
             ),
-            style="display: flex; align-items: center; gap: 8px",
+            style="display: flex; align-items: center; gap: 0.5rem",
         ),
         Ul(Li(A(deck, href=f"/download/{deck}")) for deck in deck_names),
     )
