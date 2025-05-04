@@ -10,8 +10,6 @@ server locally as well.
 Set up a local .env:
 ```
 SERVICE_ACCOUNT_JSON=see below
-USERNAME=admin
-PASSWORD=password
 ```
 
 To get the service account JSON, create a Google Cloud Service Account,
