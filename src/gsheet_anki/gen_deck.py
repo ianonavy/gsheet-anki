@@ -21,7 +21,8 @@ SCOPE = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",
 ]
-DEFAULT_SPREADSHEET_URL = ""
+# Read from env var for local scripts
+DEFAULT_SPREADSHEET_URL = os.environ.get("SPREADSHEET_URL", "")
 
 
 def get_spreadsheet(spreadsheet_url=DEFAULT_SPREADSHEET_URL):
@@ -63,6 +64,40 @@ def get_spreadsheet(spreadsheet_url=DEFAULT_SPREADSHEET_URL):
     return client.open_by_url(spreadsheet_url)
 
 
+def valid_worksheet(worksheet):
+    """
+    Checks if the worksheet is valid. A worksheet is valid if it has the
+    three required columns: ID, Front, Back. They do not necessarily
+    need to be called that, but they need to be present.
+    :param worksheet: The worksheet to check.
+    :return: A tuple (bool, str) indicating if the worksheet is valid and an error message if not.
+    """
+    required_columns = ["ID", "Front", "Back"]
+    rows = worksheet.get_all_values()
+    if not rows:
+        return False, "Worksheet is empty"
+    header = rows[0]
+    if len(header) < len(required_columns):
+        return False, "Missing required columns"
+    # Check at least one row with the required columns
+    any_valid_row = False
+    ids = set()
+    for i, row in enumerate(rows[1:]):
+        if len(row) < len(required_columns):
+            continue
+        id_ = row[0].strip()
+        if not id_:
+            return False, f"Row {i + 2} has empty ID column"
+        if id_ in ids:
+            return False, f"Row {i + 2} has duplicate ID column"
+        ids.add(id_)
+        any_valid_row = True
+    if not any_valid_row:
+        return False, "No valid cards found"
+
+    return True, ""
+
+
 def list_deck_names(url=DEFAULT_SPREADSHEET_URL):
     """
     Lists all the deck names (worksheet names).
@@ -71,7 +106,14 @@ def list_deck_names(url=DEFAULT_SPREADSHEET_URL):
     if not url:
         return []
     spreadsheet = get_spreadsheet(url)
-    return [worksheet.title for worksheet in spreadsheet.worksheets()]
+    worksheets = []
+    for worksheet in spreadsheet.worksheets():
+        valid, error = valid_worksheet(worksheet)
+        if valid:
+            worksheets.append((worksheet.title, ""))
+        else:
+            worksheets.append((worksheet.title, error))
+    return worksheets
 
 
 def sheet_to_deck(sheet):
@@ -167,8 +209,11 @@ def gen_deck_file(deck_name, spreadsheet_url=DEFAULT_SPREADSHEET_URL, in_memory=
 
 
 def main():
-    for deck_name in list_deck_names():
-        gen_deck_file(deck_name)
+    for deck_name, error in list_deck_names():
+        if not error:
+            gen_deck_file(deck_name)
+        else:
+            print(f"! {deck_name} - Error: {error}")
 
 
 if __name__ == "__main__":

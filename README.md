@@ -9,6 +9,7 @@ server locally as well.
 
 Set up a local .env:
 ```
+SPREADSHEET_URL=[only needed for local scripts]
 SERVICE_ACCOUNT_JSON=see below
 ```
 

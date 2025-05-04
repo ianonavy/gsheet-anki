@@ -8,7 +8,15 @@ from .gen_deck import list_deck_names, gen_deck_file
 
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-app, rt = fast_app(secret_key=SECRET_KEY)
+app, rt = fast_app(
+    secret_key=SECRET_KEY,
+    hdrs=[
+        Link(
+            rel="stylesheet",
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.colors.min.css",
+        ),
+    ],
+)
 
 
 def input_form(spreadsheet_url=""):
@@ -37,6 +45,34 @@ async def home(request: Request, session):
         Body(
             Div(
                 H1("gsheet-anki"),
+                P(
+                    "Generate ",
+                    ExtA("Anki decks", href="https://apps.ankiweb.net/"),
+                    " from ",
+                    ExtA("Google Sheets", href="https://www.google.com/sheets/about/"),
+                    ".",
+                ),
+                P(
+                    "Create a new workbook. For each deck, create a worksheet with a header of four columns:"
+                ),
+                Ol(
+                    Li(
+                        Em("ID: "),
+                        "Incrementing number starting from 1. Used for updating existing cards.",
+                    ),
+                    Li(Em("Front: "), "The front side of the card."),
+                    Li(Em("Back: "), "The back side of the card."),
+                    Li(
+                        Em("Tags (optional): "),
+                        "Comma-separated list of tags for each card.",
+                    ),
+                    type="A",
+                ),
+                P(
+                    "Make the spreadsheet public, or invite ",
+                    Code("live-demo@gsheet-anki.iam.gserviceaccount.com"),
+                    " to your sheet and paste the link here.",
+                ),
                 input_form(spreadsheet_url),
                 id="form",
             ),
@@ -44,12 +80,48 @@ async def home(request: Request, session):
                 all_decks,
                 id="decks",
             ),
+            footer(),
             style=(
                 "display: flex; flex-direction: column; gap: 1rem;"
                 "max-width: 800px; width: 100vw; padding: 1rem; margin: auto;"
                 "font-family: sans-serif;"
             ),
         ),
+    )
+
+
+def ExtA(*args, **kwargs):
+    kwargs["target"] = "_blank"
+    kwargs["rel"] = "noopener noreferrer"
+    return A(*args, **kwargs)
+
+
+def footer():
+    return Footer(
+        Hr(),
+        P(
+            "Made with ",
+            ExtA("FastHTML", href="https://fastht.ml/"),
+            " and deployed with ",
+            ExtA("Vercel", href="https://vercel.com/"),
+            ".",
+            style="margin-bottom: 0.5rem;",
+        ),
+        P(
+            "Like this project? ",
+            ExtA(
+                "Star it on GitHub",
+                href="https://github.com/ianonavy/gsheet-anki",
+            ),
+            " or ",
+            ExtA(
+                "buy me a potato",
+                href="https://buymeacoffee.com/justapotato",
+            ),
+            ".",
+            style="margin-bottom: 0.5rem;",
+        ),
+        style="font-size: 0.8rem; text-align: center; color: var(--pico-secondary);",
     )
 
 
@@ -63,7 +135,8 @@ async def decks(request: Request, session):
 
     try:
         deck_names = list_deck_names(spreadsheet_url)
-    except:
+    except Exception as e:
+        print(f"Error: {e}")
         deck_names = []
 
     if not deck_names:
@@ -88,7 +161,24 @@ async def decks(request: Request, session):
             ),
             style="display: flex; align-items: center; gap: 0.5rem",
         ),
-        Ul(Li(A(deck, href=f"/download/{deck}")) for deck in deck_names),
+        Ul(
+            Li(
+                (deck if error else A(deck, href=f"/download/{deck}")),
+                (
+                    (
+                        " [",
+                        Span(
+                            Strong("Error: "), style="color: var(--pico-color-red-500)"
+                        ),
+                        error,
+                        "]",
+                    )
+                    if error
+                    else None
+                ),
+            )
+            for (deck, error) in deck_names
+        ),
     )
     return available_decks
 
