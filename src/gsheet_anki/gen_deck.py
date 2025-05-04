@@ -85,8 +85,8 @@ def sheet_to_deck(sheet):
         templates=[
             {
                 'name': 'Simple Card',
-                'qfmt': '<div style="font-size: 24px; font-weight: bold;">{{Front}}</div>',
-                'afmt': '{{FrontSide}}<hr><div style="font-size: 20px;">{{Back}}</div>',
+                'qfmt': '<div style="font-size: 24px; font-weight: bold; text-align: center">{{Front}}</div>',
+                'afmt': '{{FrontSide}}<hr><div style="font-size: 20px; text-align: center">{{Back}}</div>',
             },
         ],
     )
