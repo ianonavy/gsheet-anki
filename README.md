@@ -33,3 +33,9 @@ To import the most recently generated decks, run `uv run anki-import`.
 To run the web service locally, run `vercel dev`.
 
 Alternative, to run without Vercel bits, run `uv run web`
+
+To sync the requirements.txt Vercel uses with uv.lock,
+
+```bash
+uv export --no-emit-project > requirements.txt
+```
