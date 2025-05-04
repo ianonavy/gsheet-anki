@@ -1,8 +1,16 @@
 import os
 import glob
 import subprocess
+import sys
 
-def import_to_anki(apkg_folder):
+
+def main():
+    apkg_folder = "."
+
+    # Check arguments
+    if len(sys.argv) > 1:
+        apkg_folder = sys.argv[1]
+
     # Get the latest .apkg file for each deck
     apkg_files = glob.glob(os.path.join(apkg_folder, "*.apkg"))
     if not apkg_files:
@@ -30,6 +38,4 @@ def import_to_anki(apkg_folder):
             print(f"Failed to import {apkg_file}: {e}")
 
 if __name__ == "__main__":
-    # Replace with the folder containing your .apkg files
-    apkg_folder = "."
-    import_to_anki(apkg_folder)
+    main()
