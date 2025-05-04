@@ -2,12 +2,14 @@ from fasthtml.common import *
 
 from .gen_deck import list_deck_names, gen_deck_file
 
-username = os.getenv("USERNAME", "admin")
-password = os.getenv("PASSWORD", "password")
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+USERNAME = os.getenv("USERNAME", "admin")
+PASSWORD = os.getenv("PASSWORD", "password")
 auth = user_pwd_auth(
-    {username: password}, skip=["/favicon.ico", r"/static/.*", r".*\.css"]
+    {USERNAME: PASSWORD}, skip=["/favicon.ico", r"/static/.*", r".*\.css"]
 )
-app, rt = fast_app(middleware=[auth])
+app, rt = fast_app(secret_key=SECRET_KEY, middleware=[auth])
 
 
 @rt("/")
