@@ -1,0 +1,19 @@
+<doctype html>
+<html>
+<head>
+    <title>gsheet-anki</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <h1>gsheet-anki</h1>
+    <h2>Available Decks</h2>
+    <ul>
+        {% for deck in decks %}
+            <li>
+                <a href="{{ url_for('download', deck=deck) }}">{{ deck }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

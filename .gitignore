@@ -12,3 +12,4 @@ wheels/
 service_account.json
 *.apkg
 .env
+.vercel
