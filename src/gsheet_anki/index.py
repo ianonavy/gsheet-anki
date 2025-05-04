@@ -163,7 +163,8 @@ async def decks(request: Request, session):
                     "max-width: 20px; width:100%;"
                     "color: inherit;"
                 ),
-                href="/",
+                hx_get="/decks",
+                hx_target="#decks",
             ),
             style="display: flex; align-items: center; gap: 0.5rem",
         ),
