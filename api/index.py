@@ -22,7 +22,7 @@ def home():
 @auth.login_required
 def download(deck):
     deck_name = unquote(deck)
-    filename, file_ = gen_deck_file(deck_name)
+    filename, file_ = gen_deck_file(deck_name, in_memory=True)
     if file_:
         return send_file(file_, download_name=filename, as_attachment=True)
     elif not filename:

@@ -7,6 +7,7 @@ import gspread
 import hashlib
 import json
 import os
+from io import BytesIO
 from datetime import datetime
 
 import genanki
@@ -115,10 +116,16 @@ def create_anki_decks():
     ]
 
 
-def export_deck_to_file(deck, filename):
-    genanki.Package(deck).write_to_file(filename)
-    print(f'Anki deck written to {filename}')
-    return open(filename, 'rb')
+def export_deck_to_file(deck, filename, in_memory=False):
+    if in_memory:
+        file = BytesIO()
+        genanki.Package(deck).write_to_file(file)
+        file.seek(0)
+    else:
+        genanki.Package(deck).write_to_file(filename)
+        print(f'Anki deck written to {filename}')
+        file = open(filename, 'rb')
+    return file
 
 
 def gen_filename(deck):
@@ -131,7 +138,7 @@ def gen_filename(deck):
     return f'{deck.name.replace(" ", "_").lower()}_{timestamp}.apkg'
 
 
-def gen_deck_file(deck_name):
+def gen_deck_file(deck_name, in_memory=False):
     """
     Generates an Anki deck from a Google Sheet.
     :param deck_name: The name of the deck to generate.
@@ -141,7 +148,7 @@ def gen_deck_file(deck_name):
     worksheet = spreadsheet.worksheet(deck_name)
     deck = sheet_to_deck(worksheet)
     filename = gen_filename(deck)
-    file_ = export_deck_to_file(deck, filename)
+    file_ = export_deck_to_file(deck, filename, in_memory=in_memory)
     return filename, file_
 
 
