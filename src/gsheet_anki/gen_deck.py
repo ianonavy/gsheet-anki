@@ -21,14 +21,15 @@ SCOPE = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive",
 ]
+DEFAULT_SPREADSHEET_URL = ""
 
 
-def get_spreadsheet():
+def get_spreadsheet(spreadsheet_url=DEFAULT_SPREADSHEET_URL):
     """
     Returns a gspread client spreadsheet object given the environment.
+    :param spreadsheet_url: The URL of the Google Sheet.
     :return: gspread client spreadsheet object
     """
-    spreadsheet_url = os.environ.get("SPREADSHEET_URL")
     service_account_json = os.environ.get("SERVICE_ACCOUNT_JSON")
     service_account_filename = os.environ.get(
         "SERVICE_ACCOUNT_FILENAME", "service_account.json"
@@ -62,12 +63,14 @@ def get_spreadsheet():
     return client.open_by_url(spreadsheet_url)
 
 
-def list_deck_names():
+def list_deck_names(url=DEFAULT_SPREADSHEET_URL):
     """
     Lists all the deck names (worksheet names).
     :return: A list of deck names.
     """
-    spreadsheet = get_spreadsheet()
+    if not url:
+        return []
+    spreadsheet = get_spreadsheet(url)
     return [worksheet.title for worksheet in spreadsheet.worksheets()]
 
 
@@ -148,13 +151,14 @@ def gen_filename(deck):
     return f'{deck.name.replace(" ", "_").lower()}_{timestamp}.apkg'
 
 
-def gen_deck_file(deck_name, in_memory=False):
+def gen_deck_file(deck_name, spreadsheet_url=DEFAULT_SPREADSHEET_URL, in_memory=False):
     """
     Generates an Anki deck from a Google Sheet.
     :param deck_name: The name of the deck to generate.
+    :param spreadsheet_url: The URL of the Google Sheet.
     :return: The filename and file object of the generated Anki deck.
     """
-    spreadsheet = get_spreadsheet()
+    spreadsheet = get_spreadsheet(spreadsheet_url)
     worksheet = spreadsheet.worksheet(deck_name)
     deck = sheet_to_deck(worksheet)
     filename = gen_filename(deck)

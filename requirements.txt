@@ -150,11 +150,16 @@ exceptiongroup==1.2.2 ; python_full_version < '3.11' \
     --hash=sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b \
     --hash=sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc
     # via anyio
+fa6-icons==0.0.2 \
+    --hash=sha256:2d233c99219db8e75597d5c07cdcbf32c6920ba15b0c922dd950f59a78eafd59 \
+    --hash=sha256:9a419e4c7b70fe110207a851d9bd2dc4190c0baf7c8eb669c3573b7c8598bce7
+    # via gsheet-anki
 fastcore==1.8.1 \
     --hash=sha256:51ae5d328d7864c0dd70081b32a852ff242b70af372b4dcec204969e92356afd \
     --hash=sha256:82494b84925fc80bbcfc21c65208dd4c125df70e3d465ef788d75d42cc2afc58
     # via
     #   apswutils
+    #   fa6-icons
     #   fastlite
     #   python-fasthtml
 fastlite==0.1.3 \

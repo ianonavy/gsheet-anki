@@ -9,7 +9,6 @@ server locally as well.
 
 Set up a local .env:
 ```
-SPREADSHEET_URL=https://docs.google.com/spreadsheets/d/.../edit?gid=0#gid=0
 SERVICE_ACCOUNT_JSON=see below
 USERNAME=admin
 PASSWORD=password

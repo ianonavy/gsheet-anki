@@ -230,6 +230,18 @@ wheels = [
 ]
 
 [[package]]
+name = "fa6-icons"
+version = "0.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "fastcore" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/24/23/ef93c1c8b26ccbcfcf203d2026b703238eaadf92d428462ca69c1ede4cf0/fa6-icons-0.0.2.tar.gz", hash = "sha256:9a419e4c7b70fe110207a851d9bd2dc4190c0baf7c8eb669c3573b7c8598bce7", size = 623435, upload-time = "2024-08-25T05:39:28.337Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/f2/10440ca90fed34192e707dc123dd3f9318f4bb0b61942bcd01671162e50f/fa6_icons-0.0.2-py3-none-any.whl", hash = "sha256:2d233c99219db8e75597d5c07cdcbf32c6920ba15b0c922dd950f59a78eafd59", size = 630291, upload-time = "2024-08-25T05:39:26.656Z" },
+]
+
+[[package]]
 name = "fastcore"
 version = "1.8.1"
 source = { registry = "https://pypi.org/simple" }
@@ -321,6 +333,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "dotenv" },
+    { name = "fa6-icons" },
     { name = "genanki" },
     { name = "google-auth" },
     { name = "gspread" },
@@ -331,6 +344,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "dotenv", specifier = ">=0.9.9" },
+    { name = "fa6-icons", specifier = ">=0.0.2" },
     { name = "genanki", specifier = ">=0.13.1" },
     { name = "google-auth", specifier = ">=2.39.0" },
     { name = "gspread", specifier = ">=6.2.0" },
