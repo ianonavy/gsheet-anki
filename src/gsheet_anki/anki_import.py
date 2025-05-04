@@ -25,8 +25,7 @@ def main():
         deck_name = "_".join(os.path.basename(apkg_file).split("_")[:-2])
         # Check if this is the latest file for the deck
         if apkg_file != max(
-            (f for f in apkg_files if deck_name in f),
-            key=os.path.getmtime
+            (f for f in apkg_files if deck_name in f), key=os.path.getmtime
         ):
             continue
         print(f"Importing {apkg_file} into Anki...")
@@ -36,6 +35,7 @@ def main():
             print(f"Successfully imported {apkg_file}")
         except subprocess.CalledProcessError as e:
             print(f"Failed to import {apkg_file}: {e}")
+
 
 if __name__ == "__main__":
     main()

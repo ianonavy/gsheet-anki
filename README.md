@@ -12,13 +12,11 @@ Set up a local .env:
 SPREADSHEET_URL=https://docs.google.com/spreadsheets/d/.../edit?gid=0#gid=0
 SERVICE_ACCOUNT_JSON=see below
 USERNAME=admin
-PASSWORD_HASH=see below
+PASSWORD=password
 ```
 
 To get the service account JSON, create a Google Cloud Service Account,
 enable the Sheets API, and invite the service account to your spreadsheet.
-
-To get a password hash, run `uv run hash-pw`.
 
 ## Run local
 

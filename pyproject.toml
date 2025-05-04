@@ -6,19 +6,17 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "dotenv>=0.9.9",
-    "flask>=3.1.0",
-    "flask-httpauth>=4.8.0",
     "genanki>=0.13.1",
     "google-auth>=2.39.0",
     "gspread>=6.2.0",
     "oauth2client>=4.1.3",
+    "python-fasthtml>=0.12.15",
 ]
 
 [project.scripts]
 gen-deck    = "gsheet_anki.gen_deck:main"
 anki-import = "gsheet_anki.anki_import:main"
-hash-pw     = "gsheet_anki.hash_password:main"
-web         = "gsheet_anki.index:app.run"
+web         = "gsheet_anki.index:main"
 
 [build-system]
 requires = ["hatchling"]
